@@ -1,0 +1,7 @@
+<h2>Your Scans</h2>
+<ul>
+{% for scan in scans %}
+    <li>{{ scan.uploaded_at }} - {{ scan.image.url }}</li>
+{% endfor %}
+</ul>
+<a href="{% url 'upload_scan' %}">Upload New Scan</a>
