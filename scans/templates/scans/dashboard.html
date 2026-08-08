@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
     <h2>Your Progress</h2>
     <a href="{% url 'upload_scan' %}">Upload New Scan</a>
 
@@ -45,5 +41,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

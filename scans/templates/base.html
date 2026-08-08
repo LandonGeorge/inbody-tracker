@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>InBody Tracker</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <nav>
+            <a href="{% url 'dashboard' %}">Dashboard</a> |
+            <a href="{% url 'upload_scan' %}">Upload Scan</a> |
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">Log Out</button>
+            </form>
+        </nav>
+        <hr>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
