@@ -1,9 +1,24 @@
 {% extends "base.html" %}
+
 {% block content %}
 <h2>Your Scans</h2>
 <ul>
 {% for scan in scans %}
-    <li>{{ scan.uploaded_at }} - {{ scan.image.url }}</li>
+    <li>
+        Uploaded {{ scan.uploaded_at|date:"M d, Y" }}
+        {% if scan.result %}
+            — Scan date:
+            <span style="{% if scan.date_likely_wrong %}color: red; font-weight: bold;{% endif %}">
+                {{ scan.result.scan_date|date:"M d, Y" }}
+            </span>
+            {% if scan.date_likely_wrong %}⚠️{% endif %}
+            — Weight: {{ scan.result.weight_lb }} lb
+            <a href="{% url 'edit_scan_result' scan.result.pk %}">Edit</a>
+        {% else %}
+            — (not yet processed)
+        {% endif %}
+        <a href="{% url 'delete_scan' scan.pk %}">Delete</a>
+    </li>
 {% endfor %}
 </ul>
 <a href="{% url 'upload_scan' %}">Upload New Scan</a>
