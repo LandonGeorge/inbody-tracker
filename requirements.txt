@@ -1,0 +1,8 @@
+asgiref==3.12.1
+Django==6.0.7
+numpy==2.5.1
+opencv-python-headless==5.0.0.93
+packaging==26.2
+pillow==12.3.0
+pytesseract==0.3.13
+sqlparse==0.5.5
