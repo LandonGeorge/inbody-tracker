@@ -63,7 +63,9 @@ def dashboard(request):
     }
 
     return render(
-        request, "scans/dashboard.html", {"chart_data_json": json.dumps(chart_data)}
+        request,
+        "scans/dashboard.html",
+        {"chart_data_json": json.dumps(chart_data), "latest": results.last()},
     )
 
 

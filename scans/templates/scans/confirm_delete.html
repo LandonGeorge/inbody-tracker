@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Delete this scan?</h2>
-<p>Uploaded {{ scan.uploaded_at|date:"M d, Y" }} — this cannot be undone.</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, Delete</button>
-</form>
-<a href="{% url 'scan_list' %}">Cancel</a>
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title mb-3">Delete this scan?</h2>
+        <p class="text-muted">Uploaded {{ scan.uploaded_at|date:"M d, Y" }} — this cannot be undone.</p>
+        <form method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-dark">Yes, Delete</button>
+        </form>
+        <a href="{% url 'scan_list' %}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</div>
 {% endblock %}

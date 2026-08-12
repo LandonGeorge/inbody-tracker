@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Upload InBody Scan</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+<h2 class="mb-4">Upload InBody Scan</h2>
+<div class="row">
+    <div class="col-md-6">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include "includes/bootstrap_form.html" %}
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

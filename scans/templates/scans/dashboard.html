@@ -1,45 +1,81 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Your Progress</h2>
-    <a href="{% url 'upload_scan' %}">Upload New Scan</a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Your Progress</h2>
+    <a href="{% url 'upload_scan' %}" class="btn btn-primary">Upload New Scan</a>
+</div>
 
-    <canvas id="progressChart" style="max-width: 900px;"></canvas>
+{% if latest %}
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="text-muted small">Weight</div>
+                <div class="fs-4">{{ latest.weight_lb|default:"—" }} lb</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="text-muted small">Muscle Mass</div>
+                <div class="fs-4">{{ latest.skeletal_muscle_mass_lb|default:"—" }} lb</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div class="text-muted small">Body Fat</div>
+                <div class="fs-4">{{ latest.percent_body_fat|default:"—" }}%</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const chartData = {{ chart_data_json|safe }};
+<div class="card">
+    <div class="card-body">
+        <canvas id="progressChart"></canvas>
+    </div>
+</div>
 
-        new Chart(document.getElementById('progressChart'), {
-            type: 'line',
-            data: {
-                labels: chartData.labels,
-                datasets: [
-                    {
-                        label: 'Weight (lb)',
-                        data: chartData.weight,
-                        borderColor: 'rgb(54, 162, 235)',
-                        yAxisID: 'y',
-                    },
-                    {
-                        label: 'Muscle Mass (lb)',
-                        data: chartData.muscle_mass,
-                        borderColor: 'rgb(75, 192, 192)',
-                        yAxisID: 'y',
-                    },
-                    {
-                        label: 'Body Fat %',
-                        data: chartData.body_fat_pct,
-                        borderColor: 'rgb(255, 99, 132)',
-                        yAxisID: 'y1',
-                    },
-                ]
-            },
-            options: {
-                scales: {
-                    y: { type: 'linear', position: 'left', title: { display: true, text: 'lb' } },
-                    y1: { type: 'linear', position: 'right', title: { display: true, text: '%' }, grid: { drawOnChartArea: false } },
-                }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chartData = {{ chart_data_json|safe }};
+
+    new Chart(document.getElementById('progressChart'), {
+        type: 'line',
+        data: {
+            labels: chartData.labels,
+            datasets: [
+                {
+                    label: 'Weight (lb)',
+                    data: chartData.weight,
+                    borderColor: '#6ea8fe',
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'Muscle Mass (lb)',
+                    data: chartData.muscle_mass,
+                    borderColor: '#75b798',
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'Body Fat %',
+                    data: chartData.body_fat_pct,
+                    borderColor: '#ffda6a',
+                    yAxisID: 'y1',
+                },
+            ]
+        },
+        options: {
+            color: '#adb5bd',
+            scales: {
+                y: { type: 'linear', position: 'left', title: { display: true, text: 'lb' } },
+                y1: { type: 'linear', position: 'right', title: { display: true, text: '%' }, grid: { drawOnChartArea: false } },
             }
-        });
-    </script>
+        }
+    });
+</script>
 {% endblock %}

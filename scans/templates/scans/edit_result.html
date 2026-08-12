@@ -1,11 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Edit Scan Result</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-<a href="{% url 'scan_list' %}">Cancel</a>
+<h2 class="mb-4">Edit Scan Result</h2>
+
+<div class="row g-4">
+    <div class="col-md-5">
+        <img src="{{ form.instance.upload.image.url }}" class="img-fluid rounded border">
+    </div>
+    <div class="col-md-7">
+        <form method="post">
+            {% csrf_token %}
+            {% include "includes/bootstrap_form.html" %}
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{% url 'scan_list' %}" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
 {% endblock %}
