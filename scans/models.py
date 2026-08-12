@@ -16,7 +16,6 @@ class ScanUpload(models.Model):
         return f"Scan by {self.user.username} on {self.uploaded_at.date()}"
 
 
-# Create your models here.
 class ScanResult(models.Model):
     upload = models.OneToOneField(
         ScanUpload, on_delete=models.CASCADE, related_name="result"
@@ -42,7 +41,6 @@ class ScanResult(models.Model):
         max_digits=4, decimal_places=1, null=True, blank=True
     )
     bmi = models.DecimalField(max_digits=4, decimal_places=1, null=True, blank=True)
-    basal_metabolic_rate_kcal = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"Result for {self.upload.user.username} — {self.scan_date}"
