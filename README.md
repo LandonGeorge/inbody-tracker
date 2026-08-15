@@ -2,6 +2,8 @@
 
 A Django web app that OCRs photos of InBody 270 body composition receipts and tracks metrics (weight, muscle mass, body fat, etc.) over time with charts. Supports multiple user accounts.
 
+Live at [inbody-tracker-production.up.railway.app](https://inbody-tracker-production.up.railway.app).
+
 ## Requirements
 
 - Python 3.11+ (developed against 3.12)
@@ -58,7 +60,7 @@ OCR works best on clear, well-lit, non-creased receipts. Faded thermal paper or 
 
 ## Deployment
 
-The app is deployed on [Railway](https://railway.app) using the included `Dockerfile` (Railway builds and runs it automatically — no separate config needed beyond environment variables).
+The app is deployed on [Railway](https://railway.app) at [inbody-tracker-production.up.railway.app](https://inbody-tracker-production.up.railway.app), using the included `Dockerfile` (Railway builds and runs it automatically — no separate config needed beyond environment variables).
 
 The Dockerfile installs Tesseract and OpenCV's runtime libraries alongside the Python dependencies, then runs migrations and starts `gunicorn` on container startup, binding to Railway's `$PORT`.
 
