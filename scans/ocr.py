@@ -1,3 +1,7 @@
+"""OCR pipeline for InBody 270 receipts: image preprocessing, text extraction
+via Tesseract, and regex-based parsing of the known receipt fields.
+"""
+
 import re
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
@@ -12,6 +16,12 @@ _TESSERACT_CONFIG = "--psm 4"
 
 
 def _score_text(text):
+    """Count how many expected receipt keywords appear in `text`.
+
+    Used to pick the best OCR result across rotation attempts in
+    extract_text(), since a correctly-oriented pass reads the labels
+    (Weight, Muscle, etc.) while a sideways/upside-down pass mostly won't.
+    """
     return sum(1 for keyword in _EXPECTED_KEYWORDS if keyword.lower() in text.lower())
 
 

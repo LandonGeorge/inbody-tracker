@@ -5,6 +5,9 @@ from .forms import SignUpForm
 
 
 def signup(request):
+    """Create an account and log the user in immediately, skipping the
+    separate login step new users would otherwise hit right after signing up.
+    """
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():

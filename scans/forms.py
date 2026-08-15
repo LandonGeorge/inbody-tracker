@@ -4,10 +4,20 @@ from .models import ScanResult, ScanUpload
 
 
 class MultipleFileInput(forms.ClearableFileInput):
+    """Renders `<input type="file" multiple>`. Plain FileInput doesn't
+    support the `multiple` attribute on its own.
+    """
+
     allow_multiple_selected = True
 
 
 class MultipleFileField(forms.FileField):
+    """A FileField that accepts and validates a list of uploaded files
+    instead of just one. Django's documented pattern for handling
+    `<input multiple>` in a form (FileField.clean() otherwise assumes a
+    single file).
+    """
+
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("widget", MultipleFileInput())
         super().__init__(*args, **kwargs)
