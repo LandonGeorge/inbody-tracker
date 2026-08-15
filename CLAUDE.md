@@ -43,10 +43,19 @@ Django web app that OCRs photos of InBody 270 body composition receipts and trac
 - Tuned preprocessing (grayscale + adaptive threshold + `--psm 4`, no upscaling since photos are already high-res) improved tested field accuracy from ~54% to ~76% against a batch of real receipts
 - Remaining failures are genuine character-level misreads (OCR reading the wrong digit/letter entirely) on faded or creased receipts — not fixable via regex, would need a different OCR engine to improve further
 
+## Testing
+
+- `pytest` (via `pytest-django`), not Django's built-in test runner — config in `pytest.ini`, dev-only deps in `requirements-dev.txt`
+- Root `conftest.py` autouse-overrides `MEDIA_ROOT` to a tmp dir so uploaded test files don't land in the real media directory
+- View tests live in each app's `tests.py` (`scans/tests.py`, `accounts/tests.py`); OCR calls (`extract_text`/`parse_inbody_text`) are mocked in view tests rather than exercising real Tesseract
+
+## Deployment
+
+- Deployed on Railway using the `Dockerfile` (gunicorn, migrations run automatically on container start) — see README.md's Deployment section for required env vars
+
 ## Still open / deferred
 
 - Styling/polish (currently bare HTML, no CSS)
-- Deployment (discussed Django + Chart.js server-rendered as the simpler/more deployable choice vs. a separate React frontend, but not yet deployed anywhere)
 
 ## Setup
 

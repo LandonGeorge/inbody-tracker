@@ -54,6 +54,15 @@ Live at [inbody-tracker-production.up.railway.app](https://inbody-tracker-produc
 - **View your scans:** `/scans/` — edit or delete any scan, and compare the parsed values against the original photo
 - **Dashboard:** `/scans/dashboard/` — charts of your metrics over time
 
+## Testing
+
+Tests use `pytest` (via `pytest-django`), not Django's built-in test runner.
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
 ## Notes on OCR accuracy
 
 OCR works best on clear, well-lit, non-creased receipts. Faded thermal paper or heavy creases can cause some fields (especially the scan date) to misread. If a scan's date wasn't read correctly, the list view will flag it in red — you can manually correct any field from the Edit page, which shows the original photo alongside the form for easy comparison.
