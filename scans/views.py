@@ -1,3 +1,8 @@
+"""Views for uploading, listing, editing, and charting InBody scans.
+
+Kept thin by design — OCR/parsing logic lives in ocr.py, not here.
+"""
+
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -10,6 +15,9 @@ from .ocr import extract_text, parse_inbody_text
 
 @login_required
 def upload_scan(request):
+    """Handle one or more receipt photos, running each through OCR and
+    saving a ScanUpload/ScanResult pair per file.
+    """
     if request.method == "POST":
         form = ScanUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -35,6 +43,9 @@ def upload_scan(request):
 
 @login_required
 def scan_list(request):
+    """List the current user's scans, flagging any whose scan_date fell
+    back to the upload date — usually a sign OCR failed to read the date.
+    """
     scans = request.user.scans.all()
     for scan in scans:
         if hasattr(scan, "result"):
@@ -47,6 +58,7 @@ def scan_list(request):
 
 @login_required
 def dashboard(request):
+    """Render the metrics-over-time charts for the current user."""
     results = ScanResult.objects.filter(upload__user=request.user).order_by("scan_date")
 
     chart_data = {

@@ -3,6 +3,12 @@ from django.db import models
 
 
 class ScanUpload(models.Model):
+    """A single uploaded receipt photo and its OCR processing state.
+
+    Kept separate from ScanResult so the raw image and OCR text persist
+    even if parsing fails or is redone later.
+    """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="scans")
     image = models.ImageField(upload_to="scan_receipts/%Y/%m/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -17,6 +23,13 @@ class ScanUpload(models.Model):
 
 
 class ScanResult(models.Model):
+    """Metrics parsed from a ScanUpload's receipt.
+
+    Every numeric field is nullable: OCR won't always read every field
+    correctly, and a partial result should still save rather than fail
+    outright.
+    """
+
     upload = models.OneToOneField(
         ScanUpload, on_delete=models.CASCADE, related_name="result"
     )
