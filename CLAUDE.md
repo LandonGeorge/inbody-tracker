@@ -34,6 +34,7 @@ Django web app that OCRs photos of InBody 270 body composition receipts and trac
 - All user-owned data lookups are scoped by user (e.g. `get_object_or_404(ScanResult, pk=pk, upload__user=request.user)`) — never trust a URL pk alone
 - List view flags scans where `scan_date == uploaded_at.date()` in red, since that usually means OCR failed to read the date and it fell back to upload date
 - Edit page shows the original receipt photo next to the edit form for easy comparison; list view intentionally does NOT show thumbnails (removed by choice)
+- Upload accepts multiple files at once (`MultipleFileField` in `scans/forms.py`, Django's documented pattern for `<input multiple>`); each file becomes its own `ScanUpload`/`ScanResult` pair, processed and saved in a loop
 
 ## OCR notes
 
@@ -44,7 +45,6 @@ Django web app that OCRs photos of InBody 270 body composition receipts and trac
 
 ## Still open / deferred
 
-- Batch multi-file upload (deferred, not started)
 - Styling/polish (currently bare HTML, no CSS)
 - Deployment (discussed Django + Chart.js server-rendered as the simpler/more deployable choice vs. a separate React frontend, but not yet deployed anywhere)
 

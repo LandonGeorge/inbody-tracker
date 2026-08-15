@@ -3,10 +3,27 @@ from django import forms
 from .models import ScanResult, ScanUpload
 
 
-class ScanUploadForm(forms.ModelForm):
-    class Meta:
-        model = ScanUpload
-        fields = ["image"]
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            return [single_file_clean(d, initial) for d in data]
+        return single_file_clean(data, initial)
+
+
+class ScanUploadForm(forms.Form):
+    images = MultipleFileField(
+        label="Receipt photo(s)",
+        help_text="Select one or more InBody receipt photos to upload.",
+    )
 
 
 class ScanResultEditForm(forms.ModelForm):

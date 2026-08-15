@@ -13,19 +13,18 @@ def upload_scan(request):
     if request.method == "POST":
         form = ScanUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            scan = form.save(commit=False)
-            scan.user = request.user
-            scan.save()
+            for image in form.cleaned_data["images"]:
+                scan = ScanUpload.objects.create(user=request.user, image=image)
 
-            raw_text = extract_text(scan.image.path)
-            scan.raw_ocr_text = raw_text
-            scan.processed = True
-            scan.save()
+                raw_text = extract_text(scan.image.path)
+                scan.raw_ocr_text = raw_text
+                scan.processed = True
+                scan.save()
 
-            parsed = parse_inbody_text(raw_text)
-            scan_date = parsed.pop("scan_date") or scan.uploaded_at.date()
+                parsed = parse_inbody_text(raw_text)
+                scan_date = parsed.pop("scan_date") or scan.uploaded_at.date()
 
-            ScanResult.objects.create(upload=scan, scan_date=scan_date, **parsed)
+                ScanResult.objects.create(upload=scan, scan_date=scan_date, **parsed)
 
             return redirect("scan_list")
     else:
