@@ -2,6 +2,8 @@
 
 A Django web app that OCRs photos of InBody 270 body composition receipts and tracks metrics (weight, muscle mass, body fat, etc.) over time with charts. Supports multiple user accounts.
 
+Live at [inbody-tracker-production.up.railway.app](https://inbody-tracker-production.up.railway.app).
+
 ## Requirements
 
 - Python 3.11+ (developed against 3.12)
@@ -56,6 +58,22 @@ A Django web app that OCRs photos of InBody 270 body composition receipts and tr
 
 OCR works best on clear, well-lit, non-creased receipts. Faded thermal paper or heavy creases can cause some fields (especially the scan date) to misread. If a scan's date wasn't read correctly, the list view will flag it in red — you can manually correct any field from the Edit page, which shows the original photo alongside the form for easy comparison.
 
+## Deployment
+
+The app is deployed on [Railway](https://railway.app) at [inbody-tracker-production.up.railway.app](https://inbody-tracker-production.up.railway.app), using the included `Dockerfile` (Railway builds and runs it automatically — no separate config needed beyond environment variables).
+
+The Dockerfile installs Tesseract and OpenCV's runtime libraries alongside the Python dependencies, then runs migrations and starts `gunicorn` on container startup, binding to Railway's `$PORT`.
+
+Required environment variables in production:
+
+- `SECRET_KEY` — a unique, secret value (don't reuse the dev default baked into `settings.py`)
+- `DEBUG` — set to `False`
+- `ALLOWED_HOSTS` — comma-separated hostnames, e.g. your `*.up.railway.app` domain or custom domain
+- `CSRF_TRUSTED_ORIGINS` — comma-separated origins including scheme, e.g. `https://yourapp.up.railway.app`
+- `DATA_DIR` — path to a persistent volume for the SQLite database and uploaded media (without a mounted volume, both are wiped on every redeploy)
+
+Media files (uploaded receipt photos) are served directly by Django, even with `DEBUG=False` — there's no CDN/S3 in front of them, which is fine at this app's scale but worth knowing if usage grows.
+
 ## Tech stack
 
 - Django (backend, auth, templates)
@@ -64,3 +82,4 @@ OCR works best on clear, well-lit, non-creased receipts. Faded thermal paper or 
 - Pillow (image handling)
 - Chart.js (dashboard charts, via CDN)
 - SQLite (default dev database — fine for personal/small-scale use)
+- Docker + gunicorn (production, deployed on Railway)
