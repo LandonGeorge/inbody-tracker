@@ -20,4 +20,10 @@ COPY . .
 
 EXPOSE 8000
 
-CMD python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+# --timeout raised well above gunicorn's 30s default: each upload request runs
+# OpenCV preprocessing + Tesseract OCR synchronously per photo, in a loop for
+# multi-file uploads, and full-res phone camera photos over a mobile connection
+# can push a multi-photo request past 30s — gunicorn silently kills the worker
+# and the client sees no response at all, which looks like the upload button
+# doing nothing.
+CMD python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --timeout 120
