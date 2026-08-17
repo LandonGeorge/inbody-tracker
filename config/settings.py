@@ -35,6 +35,10 @@ CSRF_TRUSTED_ORIGINS = (
     else []
 )
 
+# Railway sets this automatically for deploys built from git — no config needed.
+# Shown in the footer so it's obvious at a glance whether a deploy went out.
+GIT_COMMIT_SHA = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "")[:7]
+
 
 # Application definition
 
@@ -71,6 +75,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "scans.context_processors.version",
             ],
         },
     },

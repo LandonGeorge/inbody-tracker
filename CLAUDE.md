@@ -52,6 +52,8 @@ Django web app that OCRs photos of InBody 270 body composition receipts and trac
 ## Deployment
 
 - Deployed on Railway using the `Dockerfile` (gunicorn, migrations run automatically on container start) — see README.md's Deployment section for required env vars
+- gunicorn started with `--timeout 120` (default is 30s) — uploads run OpenCV + Tesseract synchronously per photo, looped for multi-file uploads, and a multi-photo request over a mobile connection can exceed the default before OCR finishes
+- Every page footer shows a short version string (`scans/context_processors.py`'s `version`, wired into `TEMPLATES` in `settings.py`) reading Railway's auto-populated `RAILWAY_GIT_COMMIT_SHA` env var, so it's obvious whether you're on a freshly deployed build without checking Railway; shows "Development version" when that env var isn't set (i.e. locally)
 
 ## Still open / deferred
 

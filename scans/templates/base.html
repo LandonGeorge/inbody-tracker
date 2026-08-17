@@ -37,6 +37,14 @@
         {% endblock %}
     </div>
 
+    <footer class="container text-center text-muted small py-4">
+        {% if GIT_COMMIT_SHA %}
+            Version {{ GIT_COMMIT_SHA }}
+        {% else %}
+            Development version
+        {% endif %}
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
