@@ -83,6 +83,10 @@ Required environment variables in production:
 
 Media files (uploaded receipt photos) are served directly by Django, even with `DEBUG=False` — there's no CDN/S3 in front of them, which is fine at this app's scale but worth knowing if usage grows.
 
+Every page footer shows a version string, e.g. `v1.0.0 (3db0f55)`, so you can tell at a glance whether you're looking at a freshly deployed build, without checking Railway:
+- The `v1.0.0` part comes from the `VERSION` file at the repo root — bump it by hand (semver) as part of any change worth calling a release.
+- The part in parentheses is the deployed commit's short SHA, read from Railway's auto-populated `RAILWAY_GIT_COMMIT_SHA` env var (no setup needed on Railway) — it changes on every deploy even between version bumps, so it's still useful for telling deploys apart. Locally, where that env var isn't set, it shows `(dev)` instead.
+
 ## Tech stack
 
 - Django (backend, auth, templates)

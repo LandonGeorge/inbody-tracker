@@ -35,6 +35,15 @@ CSRF_TRUSTED_ORIGINS = (
     else []
 )
 
+# Human-friendly release number — bump the VERSION file by hand (semver) as
+# part of any change worth calling a release. Shown in the footer alongside
+# GIT_COMMIT_SHA below, which changes on every deploy even between bumps.
+APP_VERSION = (BASE_DIR / "VERSION").read_text().strip()
+
+# Railway sets this automatically for deploys built from git — no config needed.
+# Shown in the footer so it's obvious at a glance whether a deploy went out.
+GIT_COMMIT_SHA = os.environ.get("RAILWAY_GIT_COMMIT_SHA", "")[:7]
+
 
 # Application definition
 
@@ -71,6 +80,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "scans.context_processors.version",
             ],
         },
     },
